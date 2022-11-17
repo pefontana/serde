@@ -15,6 +15,7 @@ enum Move {
 }
 
 fn main() {
+    // SERDE
     let a = Move::Up;
 
     let json = serde_json::to_string(&a).unwrap();
@@ -30,5 +31,20 @@ fn main() {
     assert_eq!(a, b);
 
     println!("a : {:?}", a);
-    println!("b : {:?}", b);
+    println!("b_serde : {:?}", b);
+
+    // RON
+
+    let ron = ron::to_string(&a).unwrap();
+
+    let mut file = File::create("ron.txt").unwrap();
+    file.write_all(ron.as_bytes()).unwrap();
+
+    file = File::open("ron.txt").unwrap();
+    let reader = BufReader::new(file);
+    let b_ron = ron::de::from_reader(reader).unwrap();
+    fs::remove_file("ron.txt").unwrap();
+    assert_eq!(a, b_ron);
+
+    println!("b_ron : {:?}", b_ron);
 }
