@@ -47,4 +47,11 @@ fn main() {
     assert_eq!(a, b_ron);
 
     println!("b_ron : {:?}", b_ron);
+
+    // let ron = ron::to_string(&a).unwrap();
+    let ron_buffer: Vec<u8> = ron::ser::to_string(&a).unwrap().into_bytes();
+    println!("ron_buffer : {:?}", ron_buffer);
+
+    let c: Move = ron::de::from_bytes(&ron_buffer).unwrap();
+    println!("c : {:?}", c);
 }
